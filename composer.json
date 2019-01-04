@@ -1,0 +1,22 @@
+{
+    "name": "khanhicetea/xhprof-collector",
+    "description": "PHP xhprof",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "KhanhIceTea",
+            "email": "khanhicetea@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "league/csv": "^9.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "KhanhIceTea\\Xhprof\\Collector\\": "src/"
+        }
+    }
+}
