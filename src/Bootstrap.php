@@ -69,9 +69,17 @@ class Bootstrap {
         }
 
         $data = [];
+
+        if ($id = $_GET['id'] ?? null) {
+            $data['record'] = $record = $this->storage->readFile($id);
+            $data['headers'] = array_keys(current($record));
+
+            return $this->template->render('view.php', $data);
+        }
+
         $data['reader'] = $this->storage->read();
         $data['url'] = $this->currentURL();
 
-        $this->template->render('index.php', $data);
+        return $this->template->render('index.php', $data);
     }
 }

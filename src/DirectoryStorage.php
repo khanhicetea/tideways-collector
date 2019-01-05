@@ -22,7 +22,7 @@ class DirectoryStorage implements StorageInterface {
         $ts = time();
         $hash = substr(md5($request_uri.'||'.$ts), 0, 6);
         
-        $file_path = sprintf("%s%s%s", $this->dir_path, DIRECTORY_SEPARATOR, $ts.'_'.$hash.'.json');
+        $file_path = $this->getFilePath($ts.'_'.$hash);
         $file = new FileStorage($file_path);
         $file->write($data, $request_uri);
 
@@ -46,5 +46,15 @@ class DirectoryStorage implements StorageInterface {
         $csv = Reader::createFromStream($fh);
         
         return $csv;
+    }
+
+    public function getFilePath($id) {
+        return sprintf("%s%s%s", $this->dir_path, DIRECTORY_SEPARATOR, $id.'.json');
+    }
+
+    public function readFile($id) {
+        $file_path = $this->getFilePath($id);
+        
+        return json_decode(file_get_contents($file_path), true);
     }
 }
