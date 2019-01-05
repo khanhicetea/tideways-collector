@@ -26,6 +26,12 @@ class Bootstrap {
         $this->template = new SimpleTemplate(dirname(__DIR__).DIRECTORY_SEPARATOR.'templates');
     }
 
+    public function noBuiltins() : self {
+        $this->flag = $this->flag | TIDEWAYS_FLAGS_NO_BUILTINS;
+        
+        return $this;
+    }
+
     public function enableCPU() : self {
         $this->flag = $this->flag | TIDEWAYS_FLAGS_CPU;
         
