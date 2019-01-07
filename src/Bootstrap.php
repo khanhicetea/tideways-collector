@@ -78,7 +78,30 @@ class Bootstrap {
 
         if ($id = $_GET['id'] ?? null) {
             $data['record'] = $record = $this->storage->readFile($id);
-            $data['headers'] = array_keys(current($record));
+            $data['headers'] = $headers = array_keys(current($record));
+            $caller_headers = array_filter($headers, function ($h) { return $h != 'ct'; });
+            $data['caller_headers'] = $caller_headers;
+            
+            $calls = [];
+            $callers = [];
+
+            foreach ($record as $callstack => $values) {
+                $parts = explode('==>', $callstack);
+                $from = $parts[0] ?? 'main';
+                $to = $parts[1] ?? 'main';
+
+                if (!isset($calls[$to])) {
+                    $calls[$to] = array_fill_keys($headers, 0);
+                    $callers[$from] = array_fill_keys($headers, 0);
+                }
+                foreach ($headers as $header) {
+                    $calls[$to][$header] += $values[$header];
+                    $callers[$from][$header] += $values[$header];
+                }
+            }
+
+            $data['calls'] = $calls;
+            $data['callers'] = $callers;
 
             return $this->template->render('view.php', $data);
         }
